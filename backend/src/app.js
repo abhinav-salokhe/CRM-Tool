@@ -16,7 +16,11 @@ function createApp() {
 
     app.use(
         cors({
-            origin: ["http://localhost:3000", "http://127.0.0.1:3000"],
+            origin: [
+                "http://localhost:3000",
+                "http://127.0.0.1:3000",
+                "https://crm-tool-ten-jet.vercel.app"
+            ],
             methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
             allowedHeaders: ["Content-Type", "Authorization"],
             credentials: true,
