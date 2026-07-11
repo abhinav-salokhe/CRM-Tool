@@ -1,113 +1,196 @@
-# AI-Powered CRM Lead CSV Importer
+﻿# CRM Tool
 
-An intelligent lead extraction and mapping application built for **GrowEasy**. This application allows users to upload any messy, custom, or agency-exported CSV lead spreadsheet. Using Gemini-powered LLM reasoning, the system dynamically identifies, sanitizes, and maps fields into the structured **GrowEasy CRM format**, handling edge cases such as missing values, multiple entries, and custom statuses.
+A lead-importing CRM application that converts messy CSV lead data into structured CRM-ready records using AI-powered extraction.
 
----
-
-## Technical Stack Overview
-
-### 🖥️ Frontend (Next.js App Router)
-- **Framework**: Next.js (React 19, TypeScript)
-- **Styling**: Vanilla CSS Variables & Themes (Zero Tailwind or external component libraries for full performance and design control)
-- **Features**:
-  - **Drag & Drop Upload**: Upload any CSV file with interactive drag-over styles.
-  - **Dynamic Preview Table**: Displays raw CSV rows before any AI processing occurs. Supports horizontal/vertical scrolling and sticky header/first-column styling.
-  - **Real-Time Polling Dashboard**: Monitores active AI extraction status (`PENDING` -> `PROCESSING` -> `COMPLETED`) using a dynamic circular progress gauge.
-  - **Import Summary Statistics**: Visually summarizes imported leads, skipped rows, and breakdowns by CRM statuses.
-  - **Historical Archive**: Lists previous imports with viewing links and deletion triggers.
-  - **Responsive Dual-Themes**: Full support for Light and Dark modes.
-
-### ⚙️ Backend (Node.js & Express)
-- **Runtime & Web Framework**: Node.js, Express.js (ES Modules)
-- **Database & ORM**: PostgreSQL, Prisma Client
-- **AI Processing**: Gemini Pro SDK (`@google/genai`) for batch-processing and mapping.
-- **Parsing**: Multer (file upload handling) and `csv-parse` for data extraction.
-- **Session Control**: `express-session` for secure cookie-based login states.
+This repo contains:
+- `backend/`: Express.js REST API, authentication, Prisma PostgreSQL storage, and Gemini AI extraction.
+- `frontend/`: Next.js app for CSV upload, import tracking, and result display.
 
 ---
 
-## Directory Structure
+## Project Overview
+
+The system enables users to:
+- register and login
+- upload CSV lead files
+- use AI extraction to normalize and map data
+- track import status and view summary statistics
+- inspect processed leads and skipped rows
+- delete old import jobs
+
+---
+
+## Stack
+
+### Backend
+- Node.js + Express
+- PostgreSQL
+- Prisma ORM
+- Gemini AI via `@google/genai`
+- `csv-parse` for CSV parsing
+- `express-session` for auth state
+- `cors` for cross-origin requests
+
+### Frontend
+- Next.js App Router
+- React 19
+- TypeScript
+- Environment-driven backend URL
+
+---
+
+## Repository Structure
 
 ```text
 CRM_TOOL/
-├── backend/               # Express.js REST API Server
-│   ├── prisma/            # DB Schema & migrations
+├── backend/
+│   ├── prisma/                # Prisma schema and migrations
 │   ├── src/
-│   │   ├── controllers/   # Controllers (Auth, CSV, Import)
-│   │   ├── middlewares/   # Session & auth logic
-│   │   ├── routers/       # API routes
-│   │   └── services/      # Gemini AI mapping service
-│   └── .env               # Backend environment keys
+│   │   ├── controllers/       # Request handlers
+│   │   ├── middlewares/       # Auth, validations, and error handling
+│   │   ├── routers/           # API route definitions
+│   │   ├── services/          # AI, import processor, and business logic
+│   │   ├── config/            # env and Gemini client setup
+│   │   └── lib/               # Prisma client initialization
+│   └── .env                   # Backend environment variables
 │
-├── frontend/              # Next.js Web App
-│   ├── public/            # Static assets
+├── frontend/
+│   ├── public/                # Static assets
 │   ├── src/
-│   │   ├── app/           # App router, globals, layout
-│   │   └── components/    # Common UI widgets (Navbar, Table, Upload)
-│   └── next.config.ts     # CORS proxy configuration
-│
-└── README.md              # Root setup documentation
+│   │   ├── app/               # Next.js app router entrypoints
+│   │   └── components/        # UI components
+│   └── .env                   # Frontend environment variables
+└── README.md                  # Project documentation
 ```
 
 ---
 
-## Setup & Running Locally
+## Local Setup
 
-### 1. Prerequisites
-- **Node.js**: v18.x or above
-- **Docker**: For starting PostgreSQL container (optional if Postgres is installed natively)
+### Prerequisites
+- Node.js v18 or higher
+- PostgreSQL running locally or remotely
+- npm installed
 
----
+### Backend
 
-### 2. Backend Setup
-1. Open your terminal and navigate to the `backend` directory:
+1. Change to the backend directory:
    ```bash
    cd backend
    ```
-2. Install dependencies:
+2. Install packages:
    ```bash
    npm install
    ```
-3. Configure environment variables in `backend/.env`:
+3. Create or update `backend/.env`:
    ```ini
-   PORT=3000
-   DATABASE_URL="postgresql://postgres:mysecretpassword@localhost:5432/postgres"
-   GEMINI_API_KEY="your-gemini-api-key"
+   PORT=8000
+   DATABASE_URL="postgresql://postgres:mysecretpassword@localhost:5432/mydb"
+   GEMINI_API_KEY="your_gemini_api_key"
+   JWT_SECRET="your_jwt_secret"
    ```
-4. Push Prisma schema to the database (generates Prisma Client and syncs PostgreSQL tables):
+4. Apply Prisma migrations:
+   ```bash
+   npx prisma migrate deploy
+   ```
+   For local development, alternatively:
    ```bash
    npx prisma db push
    ```
-5. Start the development server:
+5. Run the backend:
    ```bash
    npm run dev
    ```
-   *The backend will boot up at `http://localhost:3000`.*
+6. Backend URL:
+   ```text
+   http://localhost:8000
+   ```
 
----
+### Frontend
 
-### 3. Frontend Setup
-1. In a new terminal window, navigate to the `frontend` directory:
+1. Change to the frontend directory:
    ```bash
    cd frontend
    ```
-2. Install dependencies:
+2. Install packages:
    ```bash
    npm install
    ```
-3. Run the development build:
-   ```bash
-   npx next dev -p 3001
+3. Create or update `frontend/.env`:
+   ```ini
+   NEXT_PUBLIC_API_BASE_URL=https://crm-tool-1-d11p.onrender.com
    ```
-   *We start the frontend on port `3001` to prevent conflicts with the backend. The application proxy configuration in `next.config.ts` automatically maps browser requests from `http://localhost:3001/api/v1/*` to `http://localhost:3000/api/v1/*`.*
+4. Run the frontend:
+   ```bash
+   npm run dev
+   ```
+5. Frontend URL:
+   ```text
+   http://localhost:3000
+   ```
 
 ---
 
-## Lead Mapping & Import Rules
+## Environment Variables
 
-The AI pipeline maps custom files according to the following GrowEasy rules:
-1. **Allowed CRM Statuses**: `GOOD_LEAD_FOLLOW_UP`, `DID_NOT_CONNECT`, `BAD_LEAD`, `SALE_DONE`.
-2. **Allowed Data Sources**: `leads_on_demand`, `meridian_tower`, `eden_park`, `varah_swamy`, `sarjapur_plots`.
-3. **Clean Date Formatting**: All extracted `created_at` fields are parsed into ISO strings convertible by `new Date()`.
-4. **Lead Notes**: Concatenates remarks, notes, extra phone numbers, and supplementary emails into `crm_note`.
-5. **Skipped Records**: Any row lacking **both** an email and a phone number is skipped automatically.
+### Backend
+- `PORT` — API server port
+- `DATABASE_URL` — PostgreSQL connection string
+- `GEMINI_API_KEY` — Google Gemini API key
+- `JWT_SECRET` — secret used for session/auth
+
+### Frontend
+- `NEXT_PUBLIC_API_BASE_URL` — base URL for backend API calls
+
+---
+
+## API Endpoints
+
+### Authentication
+- `POST /api/v1/user/register`
+- `POST /api/v1/user/login`
+
+### Import Process
+- `POST /api/v1/import/upload`
+- `POST /api/v1/import/:importId/process`
+- `GET /api/v1/import/:importId/status`
+- `GET /api/v1/import/:importId/leads`
+- `GET /api/v1/import/:importId/skipped`
+- `GET /api/v1/import/:importId/summary`
+- `GET /api/v1/import`
+- `DELETE /api/v1/import/:importId`
+
+### Health
+- `GET /api/v1/health`
+
+---
+
+## Deployment Notes
+- The backend CORS allowlist currently supports:
+  - `http://localhost:3000`
+  - `http://127.0.0.1:3000`
+  - `https://crm-tool-ten-jet.vercel.app`
+- Set `NEXT_PUBLIC_API_BASE_URL` to your deployed backend URL.
+- Ensure Prisma client generation is handled before production start.
+
+---
+
+## Recommended Backend Scripts
+
+A production-friendly backend `package.json` should include:
+
+```json
+"scripts": {
+  "start": "node src/server.js",
+  "dev": "node --watch src/server.js",
+  "postinstall": "npx prisma generate --schema=prisma/schema.prisma"
+}
+```
+
+---
+
+## Important Notes
+- The backend uses Prisma models for `ImportJob`, `ProcessedLead`, `SkippedRecord`, and `AIBatch`.
+- Gemini extraction is performed by `@google/genai` and requires a valid API key.
+- The frontend depends on `NEXT_PUBLIC_API_BASE_URL` for backend communication.
+- If CORS errors persist, verify the deployed frontend origin is included in backend CORS settings.
