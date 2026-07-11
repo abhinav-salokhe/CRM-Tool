@@ -1,0 +1,11 @@
+Customer Name,Primary Email,WhatsApp,Date,Lead Status,Firm,Assigned To,Move in Date,Comments
+Amit Sharma,john@gmail.com; abc@gmail.com,+91 9876543210,13 May 2026,Good Lead / Follow-up,GrowEasy Corp,Sales Exec A,May 2026,Very interested.
+Amit Sharma (Duplicate),john@gmail.com,+91 9876543210,May 13 2026,Follow Up,GrowEasy Corp,Sales Exec A,May 2026,This is a duplicate of Amit.
+John Doe,abc@@gmail.com,+1 5551234567,2026/05/13,Sale,Vite LLC,Sales Agent B,June 2026,Invalid email format test.
+Alice Smith,john@example,+44 7700900123,13-05-2026,Closed,Next Co,Exec C,Immediate,Invalid email test 2.
+Bob Johnson,+91amit@gmail.com,+91 abcd12345,13/05/2026,Bad Lead,Facebook Ads,,End of year,Invalid phone and invalid email.
+鈴木 一郎,ichiro@gmail.com,,13 May 2026 2:20 PM,Interested,Tokyo Inc,Japanese Rep,,Unicode and date timestamp test.
+Empty Row Tester,,,,,,,,
+Only Phone Lead,,+91 8888888888,2026-07-10,Interested Customer,Eden,Assigned Exec A,,No email but has phone.
+Only Email Lead,only_email@gmail.com,,2026-07-10,Busy,Eden,Assigned Exec B,,No phone but has email.
+Skipped Lead Row,,,,Busy,,,2026-07-11,No phone and no email so it should be skipped.

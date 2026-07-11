@@ -1,0 +1,156 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
+
+
+
+model ImportJob {
+  id              String        @id @default(uuid())
+
+  fileName        String
+  originalName    String?
+  fileSize        Int?
+
+  status          ImportStatus  @default(PENDING)
+
+  totalRows       Int           @default(0)
+  processedRows   Int           @default(0)
+  skippedRows     Int           @default(0)
+  duplicates      Int           @default(0)
+  validEmails     Int           @default(0)
+  invalidEmails   Int           @default(0)
+  validPhones     Int           @default(0)
+  invalidPhones   Int           @default(0)
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Used for automatic cleanup
+  expiresAt       DateTime
+
+  processedLeads  ProcessedLead[]
+  skippedRecords  SkippedRecord[]
+  aiBatches       AIBatch[]
+
+  @@map("import_jobs")
+}
+
+model ProcessedLead {
+
+  id String @id @default(uuid())
+
+  importJobId String
+
+  importJob ImportJob @relation(fields: [importJobId], references: [id], onDelete: Cascade)
+
+  created_at DateTime?
+
+  name String?
+
+  email String?
+
+  country_code String?
+
+  mobile_without_country_code String?
+
+  company String?
+
+  city String?
+
+  state String?
+
+  country String?
+
+  lead_owner String?
+
+  crm_status String?
+
+  crm_note String?
+
+  data_source String?
+
+  possession_time String?
+
+  description String?
+
+  duplicate Boolean @default(false)
+
+  duplicate_reason String?
+
+  createdAt DateTime @default(now())
+
+  @@map("processed_leads")
+}
+
+model SkippedRecord {
+
+  id String @id @default(uuid())
+
+  importJobId String
+
+  importJob ImportJob @relation(fields: [importJobId], references: [id], onDelete: Cascade)
+
+  rowNumber Int
+
+  reason String
+
+  rawData Json
+
+  createdAt DateTime @default(now())
+
+  @@map("skipped_records")
+}
+model AIBatch {
+
+  id String @id @default(uuid())
+
+  importJobId String
+
+  importJob ImportJob @relation(fields: [importJobId], references: [id], onDelete: Cascade)
+
+  batchNumber Int
+
+  prompt Json
+
+  response Json
+
+  totalRows Int
+
+  processingTimeMs Int?
+
+  status BatchStatus
+
+  createdAt DateTime @default(now())
+
+  @@map("ai_batches")
+}
+
+enum ImportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum BatchStatus {
+  SUCCESS
+  FAILED
+}
