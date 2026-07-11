@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://crm-tool-1-d11p.onrender.com";
 
 const nextConfig: NextConfig = {
   async rewrites() {
