@@ -175,6 +175,51 @@ CRM_TOOL/
 
 ---
 
+## Architecture Diagram
+
+```mermaid
+flowchart LR
+  A[Next.js Frontend] --> B[Express API]
+  B --> C[Gemini AI]
+  C --> D[Parsed CRM Records]
+```
+
+---
+
+## Screenshots / Demo
+
+The repository already contains helpful screenshots in the `uploads/` folder. These are only used for documentation and are not required by the application runtime.
+
+![Login Screen](./uploads/Login.png)
+
+![Dashboard](./uploads/Dashboard.png)
+
+![Processing Screen](./uploads/Processing.png)
+
+![Parsing Screen](./uploads/ParsingScreen.png)
+
+![Parsed Output](./uploads/Output.png)
+
+![Parsed Output 2](./uploads/Output2.png)
+
+> Note: The `uploads/` folder is not required for the backend or frontend to work. It is only needed if you want the README to display these image previews.
+
+---
+
+## Demo Video
+
+Record a 2–3 minute demo video showing:
+- frontend login/registration
+- CSV upload and import start
+- backend AI processing progress
+- final parsed CRM records and import summary
+
+Include the video link here once recorded:
+
+[View Demo Video](https://youtu.be/YOUR_VIDEO_LINK)
+
+---
+
 ## Recommended Backend Scripts
 
 A production-friendly backend `package.json` should include:
