@@ -206,20 +206,6 @@ The repository already contains helpful screenshots in the `uploads/` folder. Th
 
 ---
 
-## Demo Video
-
-Record a 2–3 minute demo video showing:
-- frontend login/registration
-- CSV upload and import start
-- backend AI processing progress
-- final parsed CRM records and import summary
-
-Include the video link here once recorded:
-
-[View Demo Video](https://youtu.be/YOUR_VIDEO_LINK)
-
----
-
 ## Recommended Backend Scripts
 
 A production-friendly backend `package.json` should include:
